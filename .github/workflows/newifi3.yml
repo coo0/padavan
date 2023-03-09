@@ -101,7 +101,7 @@ jobs:
           for i in *.trx
           do
            #echo org $i
-           mv -v "$i" "${i%.*}-${{ VERSION }}.trx"
+           mv -v "$i" "${i%.*}-${{ env.VERSION }}.trx"
           done
       - name: Upload packages
         uses: actions/upload-artifact@master
