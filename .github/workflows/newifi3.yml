@@ -54,7 +54,7 @@ jobs:
           toolchain: true
           skip: true
           clean: true
-          prefix: /workdir/openwrt
+          prefix: /workdir/rt-n56u
       - name: Clone source code
         run: |
           git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/rt-n56u
