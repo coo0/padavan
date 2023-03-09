@@ -1,0 +1,60 @@
+#修改TNAME: NEWIFI3 中的NEWIFI3为你需要编译的型号，注意名称要与configs/templates/目录下的名字相同
+name: test
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  ### 控制部分结束 ( 以上内容请保持不变 )
+
+  #push:
+  #  branches:
+  #    - master
+
+  #schedule:
+  #  - cron: 0 8 * * 5
+
+  #watch:
+  #  types: [started]
+
+env:
+  # 编译时调用的 [.config] 文件名称
+  CONFIG_FILE: NEWIFI3
+### 结束
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Initialization environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install unzip libtool-bin curl cmake gperf gawk flex bison nano xxd fakeroot \
+          cpio git python-docutils gettext automake autopoint texinfo build-essential help2man \
+          pkg-config zlib1g-dev libgmp3-dev libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev wget
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          sudo mkdir -p /workdir
+          sudo mkdir -p /workdir/images/
+          sudo chown -R $USER:$GROUPS /workdir
+          cd  /workdir/images/
+          touch one.text
+      - name: Upload packages
+        uses: actions/upload-artifact@main
+        if: always()
+        with:
+          name: Padavan-KVR-NEWIFI3
+          path: workdir/images
+      - name: Upload Firmware to Release
+        uses: svenstaro/upload-release-action@v2
+        if: always()
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: workdir/images/*
+          file_glob: true
+          tag: Padavan
+          overwrite: true

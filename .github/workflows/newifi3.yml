@@ -50,8 +50,11 @@ jobs:
       - name: Clone source code
         run: |
           git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/rt-n56u
-          rm -r /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
-          cp $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
+          if [ -f "$GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png"]
+          then
+              rm -r /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
+              cp $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
+          fi
           cd /workdir/rt-n56u/toolchain-mipsel
           sh dl_toolchain.sh
       - name: Build Firmware
@@ -113,17 +116,17 @@ jobs:
            mv -v "$i" "${i%.*}-$VERSION.trx"
           done
       - name: Upload packages
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@main
         if: always()
         with:
           name: Padavan-KVR-NEWIFI3
-          path: /workdir/images
+          path: workdir/images
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
         if: always()
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /workdir/images/*
+          file: workdir/images/*
           file_glob: true
           tag: Padavan
           overwrite: true
