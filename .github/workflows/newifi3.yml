@@ -37,15 +37,16 @@ jobs:
           sudo apt-get -y install unzip libtool-bin curl cmake gperf gawk flex bison nano xxd fakeroot \
           cpio git python-docutils gettext automake autopoint texinfo build-essential help2man \
           pkg-config zlib1g-dev libgmp3-dev libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev wget
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          sudo mkdir -p /workdir
+          sudo mkdir -p /workdir/images/
+          sudo chown -R $USER:$GROUPS /workdir
       - name: Load Custom Variables
         run: |
           CONFIG_FILE=${{ env.CONFIG_FILE }}
           echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
           VERSION=$(TZ='Asia/Shanghai' date +%Y.%m.%d-%H%M)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          sudo mkdir -p /workdir
-           mkdir -p /workdir/images/
-          sudo chown -R $USER:$GROUPS /workdir
       - name: Clone source code
         run: |
           git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/rt-n56u
