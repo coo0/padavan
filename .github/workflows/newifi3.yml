@@ -47,14 +47,6 @@ jobs:
           echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
           VERSION=$(TZ='Asia/Shanghai' date +%Y.%m.%d-%H%M)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-      - name: Accelerate
-        uses: klever1988/cachewrtbuild@main
-        with:
-          ccache: false
-          toolchain: true
-          skip: true
-          clean: true
-          prefix: /workdir/rt-n56u
       - name: Clone source code
         run: |
           git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/rt-n56u
@@ -65,6 +57,14 @@ jobs:
           fi
           cd /workdir/rt-n56u/toolchain-mipsel
           sh dl_toolchain.sh
+      - name: Accelerate
+        uses: klever1988/cachewrtbuild@main
+        with:
+          ccache: false
+          toolchain: true
+          skip: true
+          clean: true
+          prefix: /workdir/rt-n56u
       - name: Build Firmware
         run: |
           cd /workdir/rt-n56u/trunk
