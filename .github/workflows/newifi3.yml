@@ -43,17 +43,19 @@ jobs:
           echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
           VERSION=$(TZ='Asia/Shanghai' date +%Y.%m.%d-%H%M)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          sudo mkdir -p /workdir
+           mkdir -p /workdir/images/
+          sudo chown -R $USER:$GROUPS /workdir
       - name: Clone source code
         run: |
-          git clone --depth=1 https://github.com/yuos-bit/Padavan.git /opt/rt-n56u
-          rm -r /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
-          cp $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png /opt/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
-          cd /opt/rt-n56u/toolchain-mipsel
+          git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/rt-n56u
+          rm -r /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
+          cp $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
+          cd /workdir/rt-n56u/toolchain-mipsel
           sh dl_toolchain.sh
-          mkdir -p /opt/images/
       - name: Build Firmware
         run: |
-          cd /opt/rt-n56u/trunk
+          cd /workdir/rt-n56u/trunk
           if [ ! -f configs/templates/$CONFIG_FILE.config ] ; then
           echo "configs/templates/$CONFIG_FILE.config not found "
           exit 1
@@ -101,8 +103,8 @@ jobs:
           #########################################################################################
           sudo ./clear_tree
           sudo ./build_firmware_modify $CONFIG_FILE 0
-          sudo mv -f images/*.trx /opt/images/
-          cd /opt/images
+          sudo mv -f images/*.trx /workdir/images/
+          cd /workdir/images
           #为固件文件名加上日期
           for i in *.trx
           do
@@ -114,13 +116,13 @@ jobs:
         if: always()
         with:
           name: Padavan-KVR-NEWIFI3
-          path: /opt/images
+          path: /workdir/images
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
         if: always()
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /opt/images/*
+          file: /workdir/images/*
           file_glob: true
           tag: Padavan
           overwrite: true
