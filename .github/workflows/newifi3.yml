@@ -3,7 +3,7 @@ name: Padavan-KVR-NEWIFI3
 
 on:
   release:
-    types: [published]
+    types: [ published ]
   push:
     tags:
       - 'v*'
@@ -12,7 +12,7 @@ on:
   #  schedule:
   #    - cron: 0 8 * * 5
   watch:
-    types: [started]
+    types: [ started ]
 
 jobs:
   build:
@@ -94,9 +94,26 @@ jobs:
           sudo ./clear_tree
           sudo ./build_firmware_modify $TNAME 0
           sudo mv -f images/*.trx /opt/images/
-      - name : Upload packages
+          VERSION=$(TZ='Asia/Shanghai' date +%Y.%m.%d-%H%M)
+          cd /opt/images
+          #为固件文件名加上日期
+          for i in *.trx
+          do
+           #echo org $i
+           mv -v "$i" "${i%.*}-${{ VERSION }}.trx"
+          done
+      - name: Upload packages
         uses: actions/upload-artifact@master
         if: always()
         with:
           name: Padavan-KVR-NEWIFI3
           path: /opt/images
+      - name: Upload Firmware to Release
+        uses: svenstaro/upload-release-action@v2
+        if: always()
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: /opt/images/*
+          file_glob: true
+          tag: Padavan
+          overwrite: true
