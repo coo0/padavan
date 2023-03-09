@@ -49,7 +49,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
       - name: Clone source code
         run: |
-          git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/rt-n56u
+          git clone --depth=1 https://github.com/fightroad/Padavan-KVR.git /workdir/rt-n56u
           if [ -f "$GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png"]
           then
               rm -r /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
