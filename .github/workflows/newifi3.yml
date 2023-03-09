@@ -47,6 +47,14 @@ jobs:
           echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
           VERSION=$(TZ='Asia/Shanghai' date +%Y.%m.%d-%H%M)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Accelerate
+        uses: klever1988/cachewrtbuild@main
+        with:
+          ccache: false
+          toolchain: true
+          skip: true
+          clean: true
+          prefix: /workdir/openwrt
       - name: Clone source code
         run: |
           git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/rt-n56u
