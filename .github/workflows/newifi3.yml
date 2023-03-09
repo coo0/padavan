@@ -50,7 +50,7 @@ jobs:
       - name: Clone source code
         run: |
           git clone --depth=1 https://github.com/vb1980/Padavan-KVR.git /workdir/rt-n56u
-          git clone --depth=1 https://github.com/coo0/Padavan-KVR.git /workdir/nrt-n56u
+          git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/nrt-n56u
           rm -rf /workdir/rt-n56u/trunk/user
           mv /workdir/nrt-n56u/trunk/user /workdir/rt-n56u/trunk/
           if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
