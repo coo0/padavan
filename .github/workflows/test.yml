@@ -44,18 +44,7 @@ jobs:
           cd  /workdir/images/
           echo "1111" >> test.trx
           ls -all
-      - name: Upload packages
-        uses: actions/upload-artifact@main
-        if: always()
-        with:
-          name: Padavan-KVR-NEWIFI3
-          path: /workdir/images
-      - name: Upload Firmware to Release
-        uses: svenstaro/upload-release-action@v2
-        if: always()
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /workdir/images/*
-          file_glob: true
-          tag: Padavan
-          overwrite: true
+           if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png]
+          then
+              echo "cp logo"
+          fi
