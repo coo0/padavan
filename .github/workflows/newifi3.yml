@@ -95,6 +95,7 @@ jobs:
           sudo ./build_firmware_modify $TNAME 0
           sudo mv -f images/*.trx /opt/images/
           VERSION=$(TZ='Asia/Shanghai' date +%Y.%m.%d-%H%M)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
           cd /opt/images
           #为固件文件名加上日期
           for i in *.trx
