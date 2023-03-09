@@ -41,15 +41,21 @@ jobs:
           sudo mkdir -p /workdir
           sudo mkdir -p /workdir/images/
           sudo chown -R $USER:$GROUPS /workdir
-          cd  /workdir/images/
-          if [ ! -f "$GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png" ]
+      - name: Load Custom Variables
+        run: |
+          CONFIG_FILE=${{ env.CONFIG_FILE }}
+          echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
+          VERSION=$(TZ='Asia/Shanghai' date +%Y.%m.%d-%H%M)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          if [ ! -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
           then
             echo "CONFIG_FILE: [/Config/$CONFIG_FILE] is not detected ..."
-            exit 1
+            exit 2
           fi
-          if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png]
+          if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
           then
               echo "cp logo"
+              exit 3
           fi
           echo "CONFIG_FILE: [$GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png] is not detected ..."
           exit 1
