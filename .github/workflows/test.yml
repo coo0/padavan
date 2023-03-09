@@ -43,6 +43,7 @@ jobs:
           sudo chown -R $USER:$GROUPS /workdir
           cd  /workdir/images/
           echo "1111" >> test.trx
+          ls -all
       - name: Upload packages
         uses: actions/upload-artifact@main
         if: always()
