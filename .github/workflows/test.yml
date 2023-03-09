@@ -48,13 +48,13 @@ jobs:
         if: always()
         with:
           name: Padavan-KVR-NEWIFI3
-          path: workdir/images
+          path: /workdir/images
       - name: Upload Firmware to Release
         uses: svenstaro/upload-release-action@v2
         if: always()
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: workdir/images/*
+          file: /workdir/images/*
           file_glob: true
           tag: Padavan
           overwrite: true
