@@ -50,7 +50,7 @@ jobs:
       - name: Clone source code
         run: |
           git clone --depth=1 https://github.com/vb1980/Padavan-KVR.git /workdir/rt-n56u
-          if [ -f "$GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png"]
+          if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
           then
               echo "cp logo"
               rm -r /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
@@ -65,10 +65,12 @@ jobs:
           echo "configs/templates/$CONFIG_FILE.config not found "
           exit 1
           fi
-          if [ -f "$GITHUB_WORKSPACE/configs/$CONFIG_FILE/.config"]
+          if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/.config ]
           then
+             echo "cp self-config"
              cp -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/.config .config
           else
+             echo "cp default-config"
              cp -f configs/templates/$CONFIG_FILE.config .config
           fi
           sed -i 's/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=n/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=y/g' .config
