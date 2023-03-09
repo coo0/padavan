@@ -46,3 +46,5 @@ jobs:
           then
               echo "cp logo"
           fi
+          echo "CONFIG_FILE: [$GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png] is not detected ..."
+          exit 1
