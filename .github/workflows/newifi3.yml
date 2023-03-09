@@ -57,14 +57,6 @@ jobs:
           fi
           cd /workdir/rt-n56u/toolchain-mipsel
           sh dl_toolchain.sh
-      - name: Accelerate
-        uses: klever1988/cachewrtbuild@main
-        with:
-          ccache: false
-          toolchain: false
-          skip: true
-          clean: true
-          prefix: /workdir/rt-n56u
       - name: Build Firmware
         run: |
           cd /workdir/rt-n56u/trunk
