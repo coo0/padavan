@@ -48,9 +48,11 @@ jobs:
           VERSION=$(TZ='Asia/Shanghai' date +%Y.%m.%d-%H%M)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           if [ ! -f "$GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png" ]
+          then
             echo "CONFIG_FILE: [/Config/$CONFIG_FILE] is not detected ..."
           fi
           if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
+          then
               echo "cp logo"
           fi
           echo "CONFIG_FILE: [$GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png] is not detected ..."
