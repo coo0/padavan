@@ -62,7 +62,7 @@ jobs:
           rm -rf /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed
           mv /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed /workdir/rt-n56u/trunk/user/www/
           sed -i '12d' /workdir/rt-n56u/trunk/user/www/Makefile
-          sed -i '12i LABEL_COPYRIGHT_TEXT="© 2023 Power By Padavan"' /workdir/rt-n56u/trunk/user/www/Makefile
+          sed -i "12i LABEL_COPYRIGHT_TEXT=\'© 2023 Power By <a href=\"https:\\\/\\\/github.com\\\/coo0\\\/padavan\" target=\"blank\">Padavan<\\/a>\'" /workdir/rt-n56u/trunk/user/www/Makefile
           if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
           then
               echo "cp logo"
