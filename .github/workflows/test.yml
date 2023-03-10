@@ -47,13 +47,12 @@ jobs:
           echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
           VERSION=$(TZ='Asia/Shanghai' date +%Y.%m.%d-%H%M)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          if [ ! -f "$GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png" ]
-          then
-            echo "CONFIG_FILE: [/Config/$CONFIG_FILE] is not detected ..."
-          fi
-          if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
-          then
-              echo "cp logo"
-          fi
+      - name: Clone source code
+        run: |
+          git clone --depth=1 https://github.com/vb1980/Padavan-KVR.git /workdir/rt-n56u
+          sed -i '12d' /workdir/rt-n56u/trunk/user/www/Makefile
+          cat /workdir/rt-n56u/trunk/user/www/Makefile
+          sed -i "12i LABEL_COPYRIGHT_TEXT=\'© 2023 Power By <a href=\"https:\\\/\\\/github.com\\\/coo0\\\/padavan\" target=\"blank\">Padavan<\\/a>\'" /workdir/rt-n56u/trunk/user/www/Makefile
+          cat /workdir/rt-n56u/trunk/user/www/Makefile
           echo "CONFIG_FILE: [$GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png] is not detected ..."
           exit 1
