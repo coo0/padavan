@@ -50,6 +50,19 @@ jobs:
       - name: Clone source code
         run: |
           git clone --depth=1 https://github.com/vb1980/Padavan-KVR.git /workdir/rt-n56u
+          git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/nrt-n56u
+          rm -rf /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced_Content.asp
+          rm -rf /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced2g_Content.asp
+          rm -rf /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/images/favicon.ico
+          rm -rf /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/images/favicon.png
+          mv /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/images/favicon.ico /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/images/favicon.ico
+          mv /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/images/favicon.png /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/images/favicon.png
+          mv /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced_Content.asp /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced_Content.asp
+          mv /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced2g_Content.asp /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced2g_Content.asp
+          rm -rf /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed
+          rm -rf /workdir/rt-n56u/trunk/user/www/dict
+          mv /workdir/nrt-n56u/trunk/user/www/dict /workdir/rt-n56u/trunk/user/www/
+          mv /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed /workdir/rt-n56u/trunk/user/www/
           if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
           then
               echo "cp logo"
@@ -78,12 +91,12 @@ jobs:
           #因不同型号配置功能不一样，所以先把配置项删除，如果你自己要添加其他的，也要写上删除这一条，切记！！！
           ################################################################################################
           
-          sed -i 's/CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER=n/CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER=y/g' .config
-          sed -i 's/CONFIG_FIRMWARE_INCLUDE_MENTOHUST=n/CONFIG_FIRMWARE_INCLUDE_MENTOHUST=y/g' .config
-          sed -i 's/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT=n/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT=y/g' .config
-          sed -i 's/CONFIG_FIRMWARE_INCLUDE_SRELAY=n/CONFIG_FIRMWARE_INCLUDE_SRELAY=y/g' .config
-          sed -i 's/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=y/g' .config
-          sed -i 's/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=n/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=y/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER=n/CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER=n/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_MENTOHUST=n/CONFIG_FIRMWARE_INCLUDE_MENTOHUST=n/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT=n/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT=n/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_SRELAY=n/CONFIG_FIRMWARE_INCLUDE_SRELAY=n/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=n/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=n/g' .config
           
           ######################################################################
           #以下选项是定义你需要的功能，（y=集成,n=忽略），重新写入到.config文件
