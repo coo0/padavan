@@ -60,9 +60,9 @@ jobs:
           mv /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced_Content.asp /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced_Content.asp
           mv /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced2g_Content.asp /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced2g_Content.asp
           rm -rf /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed
-          rm -rf /workdir/rt-n56u/trunk/user/www/dict
-          mv /workdir/nrt-n56u/trunk/user/www/dict /workdir/rt-n56u/trunk/user/www/
           mv /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed /workdir/rt-n56u/trunk/user/www/
+          sed -i '12d' /workdir/rt-n56u/trunk/user/www/Makefile
+          sed -i '12i LABEL_COPYRIGHT_TEXT="© 2023 Power By Padavan"' /workdir/rt-n56u/trunk/user/www/Makefile
           if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
           then
               echo "cp logo"
