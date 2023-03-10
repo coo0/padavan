@@ -51,12 +51,8 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/vb1980/Padavan-KVR.git /workdir/rt-n56u
           git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/nrt-n56u
-          rm -rf /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced_Content.asp
-          rm -rf /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced2g_Content.asp
-          mv /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced_Content.asp /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced_Content.asp
-          mv /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced2g_Content.asp /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced2g_Content.asp
-          rm -rf /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed
-          mv /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed /workdir/rt-n56u/trunk/user/www/
+          rm -rf /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap
+          mv /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/
           if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
           then
               echo "cp logo"
