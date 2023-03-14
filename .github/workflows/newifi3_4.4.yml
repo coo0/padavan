@@ -50,6 +50,7 @@ jobs:
       - name: Clone source code
         run: |
           git clone --depth=1 https://github.com/MeIsReallyBa/padavan-4.4.git /workdir/rt-n56u
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_OC=n/CONFIG_FIRMWARE_INCLUDE_OC=y/g' /workdir/rt-n56u/trunk/build_firmware_modify 
           if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
           then
               echo "cp logo"
