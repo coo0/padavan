@@ -76,7 +76,7 @@ jobs:
       - name: Build Firmware
         run: |
           cd /workdir/rt-n56u/trunk
-          if [ ! -f configs/boards/$CONFIG_FILE ] ; then
+          if [ ! -d configs/boards/$CONFIG_FILE ] ; then
           echo "configs/boards/$CONFIG_FILE not found "
           exit 1
           fi
