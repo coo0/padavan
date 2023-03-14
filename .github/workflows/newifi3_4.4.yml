@@ -61,10 +61,6 @@ jobs:
       - name: Build Firmware
         run: |
           cd /workdir/rt-n56u/trunk
-          if [ ! -f configs/templates/$CONFIG_FILE.config ] ; then
-          echo "configs/templates/$CONFIG_FILE.config not found "
-          exit 1
-          fi
           if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/4.config ]
           then
              echo "cp self-config"
