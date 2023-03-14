@@ -56,6 +56,7 @@ jobs:
               rm -r /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
               cp $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
           fi
+          mv $GITHUB_WORKSPACE/configs/$CONFIG_FILE/NEWIFI3 /workdir/rt-n56u/trunk/configs/boards/
           cd /workdir/rt-n56u/toolchain-mipsel
           sh dl_toolchain.sh
       - name: Build Firmware
