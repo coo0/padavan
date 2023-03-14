@@ -49,7 +49,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
       - name: Clone source code
         run: |
-          git clone --depth=1 https://github.com/MeIsReallyBa/padavan-4.4.git /workdir/rt-n56u
+          git clone --depth=1 https://github.com/vb1980/Padavan-KVR.git /workdir/rt-n56u
           git clone --depth=1 https://github.com/yuos-bit/Padavan.git /workdir/nrt-n56u
           rm -rf /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced_Content.asp
           rm -rf /workdir/nrt-n56u/trunk/user/www/n56u_ribbon_fixed/Advanced_WAdvanced2g_Content.asp
