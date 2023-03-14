@@ -1,0 +1,138 @@
+#修改TNAME: NEWIFI3 中的NEWIFI3为你需要编译的型号，注意名称要与configs/templates/目录下的名字相同
+name: Padavan-KVR-NEWIFI-4.4
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+  ### 控制部分结束 ( 以上内容请保持不变 )
+
+  #push:
+  #  branches:
+  #    - master
+
+  #schedule:
+  #  - cron: 0 8 * * 5
+
+  #watch:
+  #  types: [started]
+
+env:
+  # 编译时调用的 [.config] 文件名称
+  CONFIG_FILE: NEWIFI
+### 结束
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Initialization environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install unzip libtool-bin curl cmake gperf gawk flex bison nano xxd fakeroot \
+          cpio git python-docutils gettext automake autopoint texinfo build-essential help2man \
+          pkg-config zlib1g-dev libgmp3-dev libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev wget
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          sudo mkdir -p /workdir
+          sudo mkdir -p /workdir/images/
+          sudo chown -R $USER:$GROUPS /workdir
+      - name: Load Custom Variables
+        run: |
+          CONFIG_FILE=${{ env.CONFIG_FILE }}
+          echo "CONFIG_FILE=$CONFIG_FILE" >> $GITHUB_ENV
+          VERSION=$(TZ='Asia/Shanghai' date +%Y.%m.%d-%H%M)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Clone source code
+        run: |
+          git clone --depth=1 https://github.com/MeIsReallyBa/padavan-4.4.git /workdir/rt-n56u
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_OC=n/CONFIG_FIRMWARE_INCLUDE_OC=y/g' /workdir/rt-n56u/trunk/build_firmware_modify 
+          if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png ]
+          then
+              echo "cp logo"
+              rm -r /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
+              cp $GITHUB_WORKSPACE/configs/$CONFIG_FILE/asus_logo.png /workdir/rt-n56u/trunk/user/www/n56u_ribbon_fixed/bootstrap/img/asus_logo.png
+          fi
+          mv $GITHUB_WORKSPACE/configs/$CONFIG_FILE/NEWIFI3 /workdir/rt-n56u/trunk/configs/boards/
+          cd /workdir/rt-n56u/toolchain-mipsel
+          sh dl_toolchain.sh
+      - name: Build Firmware
+        run: |
+          cd /workdir/rt-n56u/trunk
+          if [ -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/4.config ]
+          then
+             echo "cp self-config"
+             cp -f $GITHUB_WORKSPACE/configs/$CONFIG_FILE/4.config .config
+          else
+             echo "cp default-config"
+             cp -f configs/templates/$CONFIG_FILE.config .config
+          fi
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=n/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=y/g' .config
+          ################################################################################################
+          #因不同型号配置功能不一样，所以先把配置项删除，如果你自己要添加其他的，也要写上删除这一条，切记！！！
+          ################################################################################################
+          
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER=n/CONFIG_FIRMWARE_INCLUDE_DNSFORWARDER=n/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_MENTOHUST=n/CONFIG_FIRMWARE_INCLUDE_MENTOHUST=n/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT=n/CONFIG_FIRMWARE_INCLUDE_SCUTCLIENT=n/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_SRELAY=n/CONFIG_FIRMWARE_INCLUDE_SRELAY=n/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n/CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n/g' .config
+          sed -i 's/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=n/CONFIG_FIRMWARE_INCLUDE_OPENSSL_EXE=n/g' .config
+          
+          ######################################################################
+          #以下选项是定义你需要的功能，（y=集成,n=忽略），重新写入到.config文件
+          ######################################################################
+          
+          echo "CONFIG_FIRMWARE_INCLUDE_ZEROTIER=n" >> .config #zerotier ~1.3M
+          echo "CONFIG_FIRMWARE_INCLUDE_SHADOWSOCKS=n" >> .config #SS plus+ 科学上网插件
+          echo "CONFIG_FIRMWARE_INCLUDE_V2RAY=n" >> .config #集成v2ray执行文件（3.8M左右)
+          echo "CONFIG_FIRMWARE_INCLUDE_SSOBFS=n" >> .config # simple-obfs混淆插件
+          echo "CONFIG_FIRMWARE_INCLUDE_XRAY=n" >> .config #集成xray执行文件，可以代替v2ray，大小5M多，如果闪存太小不够还是建议使用v2ray
+          echo "CONFIG_FIRMWARE_INCLUDE_TROJAN=n" >> .config #集成trojan执行文件(1.1M左右)
+          echo "CONFIG_FIRMWARE_INCLUDE_ADBYBY=n" >> .config #adbyby plus+
+          echo "CONFIG_FIRMWARE_INCLUDE_ALIDDNS=n" >> .config #阿里DDNS
+          echo "CONFIG_FIRMWARE_INCLUDE_FRPC=n" >> .config #内网穿透FRPC不占空间(8.0kb左右)
+          echo "CONFIG_FIRMWARE_INCLUDE_FRPS=n" >> .config #内网穿透FRPS不占空间(8.0kb左右)
+          echo "CONFIG_FIRMWARE_INCLUDE_SMARTDNS=n" >> .config #smartdns
+          echo "CONFIG_FIRMWARE_INCLUDE_KOOLPROXY=n" >> .config #KP广告过滤
+          echo "CONFIG_FIRMWARE_INCLUDE_WYY=n" >> .config #网易云解锁
+          echo "CONFIG_FIRMWARE_INCLUDE_DDNSTO=n" >> .config #ddnsto
+          echo "CONFIG_FIRMWARE_INCLUDE_ADGUARDHOME=n" >> .config #adguardhome不占空间(7.2kb左右)
+          echo "CONFIG_FIRMWARE_INCLUDE_ALDRIVER=n" >> .config #阿里云盘不占空间(5.0kb左右)
+          echo "CONFIG_FIRMWARE_INCLUDE_CADDY=n" >> .config #在线文件管理服务不占空间(4.0kb左右)
+          
+          #########################################################################################
+          #自定义添加其它功能请参考源码configs/templates/目录下的config文件。按照上面的格式添加即可
+          #格式如下：
+          #sed -i '/自定义项/d' .config
+          #echo "自定义项=y" >> .config
+          #########################################################################################
+          sudo ./clear_tree
+          sudo ./build_firmware_modify $CONFIG_FILE 0
+          sudo mv -f images/*.trx /workdir/images/
+          cd /workdir/images
+          #为固件文件名加上日期
+          for i in *.trx
+          do
+           #echo org $i
+           mv -v "$i" "${i%.*}-$VERSION.trx"
+          done
+      - name: Upload packages
+        uses: actions/upload-artifact@main
+        if: always()
+        with:
+          name: Padavan-KVR-NEWIFI3
+          path: /workdir/images
+      - name: Upload Firmware to Release
+        uses: svenstaro/upload-release-action@v2
+        if: always()
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: /workdir/images/*
+          file_glob: true
+          tag: Padavan
+          overwrite: true
